@@ -22,7 +22,7 @@ def check_integrity(filepath, original_hash):
     if current_hash == original_hash:
         print("FILE ENTIRE: No change detected")
     else:
-        print('WARNING: The file has been modified or corrupted!')
+        print("WARNING: The file has been modified or corrupted!")
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 filepath = os.path.join(script_dir, "example.txt")
