@@ -11,8 +11,8 @@ def get_file_hash(file_path):
         print("File not found")
         return None
 
-file_path = 'example.txt'
-original_hash = get_file_hash(file_path)
+filepath = 'example.txt'
+original_hash = get_file_hash(filepath)
 
 if original_hash:
     print(f"Initial hash {original_hash}")
