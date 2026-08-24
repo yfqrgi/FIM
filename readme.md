@@ -4,4 +4,4 @@ Calculates the SHA-256 hash of a file. Even if a single character or pattern in 
 
 ### Run
 ```bash
-python main.py
+python fim.py
