@@ -60,23 +60,23 @@ def monitor_integrity(target_dir, interval=3):
     except KeyboardInterrupt:
         print("\n[=] Tracking stopped")
 
-def check_integrity(filepath, original_hash):
-    current_hash = get_file_hash(filepath)
+def main():
+    parser = argparse.ArgumentParser(description="JSON-based File Integrity Monitor (FIM)")
+    parser.add_argument("-d", "--dir", default=".", help="Folder to watch (Default: current folder)")  
+    parser.add_argument("--setup", action="store_true", help="Create a new baseline (hash database)")  
+    parser.add_argument("--monitor", action="store_true", help="Start file integrity monitoring)")
+    parser.add_argument("-i", "--interval", type=int, default=3, help="Tracking interval in seconds (Default: 3s)")
 
-    print(f"Old hash {original_hash}")
-    print(f"Current hash {current_hash}")
-    print('-'*50)
+    args = parser.parse_args()
 
-    if current_hash == original_hash:
-        print("FILE ENTIRE: No change detected")
+    if args.setup:
+        create_baseline(args.dir)
+    elif args.monitor:
+        monitor_integrity(args.dir, args.interval)
     else:
-        print("WARNING: The file has been modified or corrupted!")
+        print("Please select a mode: --setup (create a database) or --monitor (monitor)")
+        print("Example: python fim.py --setup")
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-filepath = os.path.join(script_dir, "example.txt")
-original_hash = get_file_hash(filepath)
 
-while True:
-    if original_hash:
-        print(f"Initial hash {original_hash}")
-        check_integrity(filepath, original_hash)
+if __name__ == "__main__":
+    main()
