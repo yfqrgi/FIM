@@ -36,6 +36,29 @@ def create_baseline(target_dir):
 
     print(f"Baseline saved: {len(baseline)} files written to {BASELINE_FILE}")
 
+def monitor_integrity(target_dir, interval=3):
+    if not os.path.exists(BASELINE_FILE):
+        print(f"[!] {BASELINE_FILE} not found! First run --setup mode")
+        return
+
+    with open(BASELINE_FILE, 'r') as f:
+        baseline = json.load(f)
+
+    print(f"[=] Monitoring started (with interval {interval}s). To stop: Ctrl+C\n" + "-"*60)
+
+    try:
+        while True:
+            for filepath, old_hash in baseline.items():
+                if not os.path.exists(filepath):
+                    print(f"[DELETED] File deleted {filepath}")
+                else:
+                    current_hash = get_file_hash(filepath)
+                    if current_hash != old_hash:
+                        print(f"[NEW FILE] New file added: {filepath}")
+
+            time.sleep(interval)
+    except KeyboardInterrupt:
+        print("\n[=] Tracking stopped")
 
 def check_integrity(filepath, original_hash):
     current_hash = get_file_hash(filepath)
